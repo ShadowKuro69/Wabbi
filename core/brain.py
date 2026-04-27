@@ -20,3 +20,12 @@ class Brain:
         self.conn.commit()
         self.cursor.execute("INSERT OR IGNORE INTO profiles (user_id) VALUES (?)", (self.user_id,))
         self.conn.commit()
+
+    def get(self, key):
+        self.cursor.execute(f"SELECT {key} FROM profiles WHERE user_id = ?", (self.user_id,))
+        row = self.cursor.fetchone()
+        return row[0] if row else None
+    
+    def set(self, key, value):
+        self.cursor.execute(f"UPDATE profiles SET {key} = ? WHERE user_id = ?", (value, self.user_id))
+        self.conn.commit()
